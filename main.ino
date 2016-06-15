@@ -40,19 +40,19 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include "FS.h"
-#include <IRremoteESP8266.h>      // https://github.com/markszabo/IRremoteESP8266
-#include <PubSubClient.h>         // https://github.com/knolleary/pubsubclient
+#include <IRremoteESP8266.h>      // https://github.com/markszabo/IRremoteESP8266 (use local copy)
+#include <PubSubClient.h>         // https://github.com/knolleary/pubsubclient (id: 89)
 #include <DNSServer.h>            // Local DNS Server used for redirecting all requests to the configuration portal
 #include <ESP8266WebServer.h>     // Local WebServer used to serve the configuration portal
-#include <WiFiManager.h>          // https://github.com/tzapu/WiFiManager WiFi Configuration Magic
-#include <ArduinoJson.h>          // https://github.com/bblanchon/ArduinoJson
+#include <WiFiManager.h>          // https://github.com/tzapu/WiFiManager WiFi Configuration Magic (id: 567)
+#include <ArduinoJson.h>          // https://github.com/bblanchon/ArduinoJson (id: 64)
 
 
 // Slots for RAW data recording
 #define SLOTS_NUMBER 20 // Number of slots
 #define SLOT_SIZE 300   // Size of single slot
 #define SEQ_SIZE 10     // Raw sequnece size
-//#define DEBUG X
+#define DEBUG X
 
 
 // RAW data storage
@@ -105,6 +105,23 @@ void connect_to_MQTT();
 
 //PubSubClient client(mqtt_server, 1883, callback, wifiClient);
 PubSubClient client(wifiClient);
+
+/* **************************************************************
+ * Convert String to unsigned long
+ *
+ */
+unsigned long StrToUL(String inputString)
+{
+  unsigned long result = 0;
+  for (int i = 0; i < inputString.length(); i++)
+  {
+    char c = inputString.charAt(i);
+    if (c < '0' || c > '9') break;
+    result *=10;
+    result += (c - '0');
+  }
+  return result;
+}
 
 /* **************************************************************
  * Write IR codes array to slot file
@@ -198,7 +215,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   unsigned int freq=38;
   String msgString = String(messageBuf);
   String topicString = String(topic);
-  unsigned long msgInt = msgString.toInt();
+
+  //unsigned long msgInt = msgString.toInt();
+  unsigned long msgInt = StrToUL(msgString);
   #ifdef DEBUG
     Serial.println("*IR: ======= NEW MESSAGE ======");
     Serial.println("*IR: Topic: \"" + topicString+"\"");
