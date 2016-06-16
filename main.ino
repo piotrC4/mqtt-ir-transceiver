@@ -513,7 +513,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
       Serial.print("*IR: Send NEC:");
       Serial.println(msgInt);
 #endif
-      irsend.sendNEC(msgInt, 36);
+      irsend.sendNEC(msgInt, irBitsInt);
     } else if (irTypStr=="RC5") {
 #ifdef DEBUG
       Serial.print("*IR: Send RC5:");
