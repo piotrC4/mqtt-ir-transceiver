@@ -2,6 +2,16 @@
 
 Gateway between MQTT and IR signal
 
+Setup an IR receiver on pin 3, an IR transmitter on pin 0 (DEBUG MODE).
+
+Download the included libraries to your arduino IDE libraries folder (please take care of having the last versions of library), for example previous versions of pubsubclient.h could generate compilation errors)
+Upload the sketch to your ESP8266
+Connect to the ESP8266 directly by wifi, adress should be 192.168.4.1
+Enter your configuration parameters (if you don't have an mqtt user and password just set nothing)
+You are ready
+
+If you need to reset the config file just connect pin 6 to the ground (DEBUG MODE).
+
 ##Usage
 
 ### Controller → Device communication
