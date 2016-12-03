@@ -1,5 +1,5 @@
 /*
- * IRremoteESP8266: IRServer - MQTT IR server
+ * IRremoteESP8266: IRServer - MQTT IR transceiver
  * used library:
  * https://github.com/markszabo/IRremoteESP8266
  * based on:
