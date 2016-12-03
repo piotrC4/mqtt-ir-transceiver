@@ -1,9 +1,42 @@
 # mqtt-ir-transceiver
 
-Gateway between MQTT and IR signal
+ESP8266 based gateway between MQTT and IR. Use with PlatformIO.
 
+##Installation
+
+###GPIO connections:
+<table>
+  <tr>
+  <th>GPIO</th>
+  <th>Usage</th>
+  </tr>
+  <tr>
+  <td>13</td>
+  <td>IR receiver</td>
+  </tr>
+  <tr>
+  <td>14</td>
+  <td>IR LED - connected via simple transistor amplifier</td>
+  </tr>
+  <tr>
+  <td>15</td>
+  <td>Button to +3,3V - used for reset configuration</td>
+  </tr>
+  <tr>
+  <td>2</td>
+  <td>LED - build in Wemos D1</td>
+  </tr>
+</table>
+
+###Compilation and firmware uploading
+
+TODO
 
 ##Usage
+
+### Configuration
+
+TODO
 
 ### Controller → Device communication
 <table>
