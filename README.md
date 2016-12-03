@@ -2,6 +2,12 @@
 
 ESP8266 based gateway between MQTT and IR. Use with PlatformIO. Works with ESP-01 (debug mode have to be disabled in globals.h)
 
+## Features
+
+* Receiving of IR transmission and publish it as MQTT messages
+* Receive MQTT messages and send IR signal (multiple formats supported - NEC, RC5, LG, SONY, Global Cache)
+* Storing raw IR messages on flash and transmitting via IR  
+
 ##Used librariers
 
 * IRremoteESP8266 - https://github.com/markszabo/IRremoteESP8266/
