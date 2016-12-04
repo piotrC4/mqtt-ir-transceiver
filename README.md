@@ -150,3 +150,42 @@ TODO
     <td>Topic: "_mqtt_prefix_/receiver/RC_5/12"<br/>Message: "3294"</td>
   </tr>
 </table>
+
+### Integration with OpenHab
+
+* Run MQTT server (mosquitto is fine)
+* Configure MQTT server for OpenHab transport
+* Register IR Transceiver to the same MQTT server
+* Example items configuration:
+```java
+Group gIR <own_ir> (All)
+Switch   ir_philips_on
+        "Philips Power" <own_ir> (gIR)
+        {mqtt=">[mosquitto:esp8266/02/sender/RC5/12:command:ON:56]", autoupdate="false"}
+Switch   ir_philips_volp
+        "Vol+"  <own_ir> (gIR)
+        {mqtt=">[mosquitto:esp8266/02/sender/RC5/12:command:ON:1040]", autoupdate="false"}
+Number ir_in_lg
+        "LG IR command [%d]"    <own_ir> (gIR)
+        {mqtt="<[mosquitto:esp8266/02/receiver/NEC/32:state:default]"}
+```
+* Using in rules:
+```java
+rule lgTVturnInfoScreen
+when
+        Item ir_in_lg received update 551549190
+then
+        // Do somenting after button press
+end
+
+rule initIRmodule
+when
+        System started
+then
+        // Turn off Philips after system start
+        postUpdate(ir_philips_on,OFF)
+
+        // Switch LG TV to HDMI 1
+        publish("mosquitto","esp8266/02/sender/sendGC","38000,1,69,343,172,21,22,21,22,21,65,21,22,21,22,21,22,21,22,21,22,21,65,21,65,21,22,21,65,21,65,21,65,21,65,21,65,21,22,21,65,21,65,21,65,21,22,21,22,21,65,21,65,21,65,21,22,21,22,21,22,21,65,21,65,21,22,21,22,21,1673,343,86,21,3732")
+end
+```
