@@ -61,13 +61,31 @@ ESP8266 based gateway between MQTT and IR. Use with PlatformIO. Works with ESP-0
 
 ###Compilation and firmware uploading
 
-TODO
+[PlatformIO](http://platformio.org/) and [Atom editor](https://atom.io/) with PlatformIO IDE package are required. See [installation procedure](http://docs.platformio.org/en/stable/ide/atom.html#installation)
+
+#### 1. Clone the Repository
+
+``` bash
+git clone https://github.com/enc-X/mqtt-ir-transceiver
+```
+
+#### 2. Import project to PlatformIO
+
+Run Atom editor and in **PlatformIO** menu choose option **Open Project folder...**. Select folder with imported project.
+
+#### 3. Build binary file
+
+In **PlatformIO** menu choose option **Build**
+
+#### 4. Upload to ESP8266
+
+Connect ESP to PC via serial adapter. Change **upload_port** variable in platformio.ini file and set it to corret serial line. In **PlatformIO** menu choose option **Upload**.
 
 ##Usage
 
 ### Configuration
 
-TODO
+During first boot device will act as AP. Connect to this AP and go to http://192.168.4.1. Configure WIFI and MQTT paramters
 
 ### Controller → Device communication
 <table>
@@ -185,7 +203,7 @@ then
         // Turn off Philips after system start
         postUpdate(ir_philips_on,OFF)
 
-        // Switch LG TV to HDMI 1
+        // Switch LG TV to HDMI 1 by Global Cache code
         publish("mosquitto","esp8266/02/sender/sendGC","38000,1,69,343,172,21,22,21,22,21,65,21,22,21,22,21,22,21,22,21,22,21,65,21,65,21,22,21,65,21,65,21,65,21,65,21,65,21,22,21,65,21,65,21,65,21,22,21,22,21,65,21,65,21,65,21,22,21,22,21,22,21,65,21,65,21,22,21,22,21,1673,343,86,21,3732")
 end
 ```

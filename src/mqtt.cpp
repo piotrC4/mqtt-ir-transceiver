@@ -284,7 +284,6 @@ void callback(char* topic, byte* payload, unsigned int length)
 
     if (irTypStr=="storeRaw" || irTypStr == "sendGC")
     {
-//--------------------
       unsigned int msgLen = msgString.length();
       String allowedChars = String("0123456789,");
       for (int i=0;i< msgLen;i++)
@@ -324,7 +323,6 @@ void callback(char* topic, byte* payload, unsigned int length)
         }
         elementIdx++;
       } while (commIdx>-1);
-//--------------------
       if (irTypStr=="storeRaw" && irBitsInt>0 && irBitsInt<=SLOTS_NUMBER)
       {
         // Store Raw
