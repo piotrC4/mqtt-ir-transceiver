@@ -173,7 +173,7 @@ During first boot device will act as AP. Connect to this AP and go to http://192
 
 * Run MQTT server (mosquitto is fine)
 * Configure MQTT server for OpenHab transport
-* Register IR Transceiver to the same MQTT server
+* Register IR Transceiver to the same MQTT server (for example MQTT prefix is 'esp8266/02')
 * Example items configuration:
 ```java
 Group gIR <own_ir> (All)
