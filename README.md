@@ -73,19 +73,26 @@ git clone https://github.com/enc-X/mqtt-ir-transceiver
 
 Run Atom editor and in **PlatformIO** menu choose option **Open Project folder...**. Select folder with imported project.
 
-#### 3. Build binary file
+#### 3. Setup serial Port
+From the list with files in the left tab open the platformio.ini and change the **upload_port = com12** to the correct port with your ESP8266.
+
+#### 4. Build binary file
 
 In **PlatformIO** menu choose option **Build**
 
-#### 4. Upload to ESP8266
+#### 5. Upload to ESP8266
 
-Connect ESP to PC via serial adapter. Change **upload_port** variable in platformio.ini file and set it to corret serial line. In **PlatformIO** menu choose option **Upload**.
+Connect ESP to PC via serial adapter. In **PlatformIO** menu choose option **Upload**.
 
 ##Usage
 
 ### Configuration
 
-During first boot device will act as AP. Connect to this AP and go to http://192.168.4.1. Configure WIFI and MQTT paramters
+During first boot device will act as AP with SSID **IRTRANS-XXXXXX**. Connect to this AP and go to http://192.168.4.1. Configure WIFI and MQTT paramters.
+
+### Resetting configuration
+
+If during boot device have button pressed, it will go to configuration mode.
 
 ### Controller → Device communication
 <table>
