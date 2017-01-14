@@ -8,10 +8,15 @@ ESP8266 based gateway between MQTT and IR. Use with PlatformIO. Works with ESP-0
 * Receive MQTT messages and send IR signal (multiple formats supported - NEC, RC5, LG, SONY, [Global Cache](https://irdb.globalcache.com/Home/Database) )
 * Storing raw IR messages on flash and transmitting via IR  
 * Constant current IR LED emitter circuit (based on [Analysir schematic](https://www.analysir.com/blog/2013/11/22/constant-current-infrared-led-circuit/) )
+
 ##Modes
+
 ###IR transmitting
+
 ![alt text](docs/ir-mode-sender.png "IR transmitting mode")
+
 ###IR receiving
+
 ![alt text](docs/ir-mode-receiver.png "IR receiving mode")
 
 ##Used librariers
