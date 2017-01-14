@@ -1,6 +1,6 @@
-# mqtt-ir-transceiver
+# MQTT IR transceiver
 
-ESP8266 based gateway between MQTT and IR. Use with PlatformIO. Works with ESP-01 (debug mode have to be disabled in globals.h)
+ESP8266 based gateway between MQTT and IR. Code compatible with [PlatformIO](http://platformio.org/). Works with ESP-01 (debug mode have to be disabled in globals.h)
 
 ## Features
 
@@ -9,7 +9,7 @@ ESP8266 based gateway between MQTT and IR. Use with PlatformIO. Works with ESP-0
 * Storing raw IR messages on flash and transmitting via IR  
 * Constant current IR LED emitter circuit (based on [Analysir schematic](https://www.analysir.com/blog/2013/11/22/constant-current-infrared-led-circuit/) )
 
-##Modes
+##Working modes
 
 ###IR transmitting
 
@@ -51,7 +51,7 @@ ESP8266 based gateway between MQTT and IR. Use with PlatformIO. Works with ESP-0
   <td>Button - used for reset configuration</td>
   </tr>
   <tr>
-  <td>2 (Weomos buildin)</td>
+  <td>2 (Wemos buildin)</td>
   <td>not used</td>
   <td>LED</td>
   </tr>
@@ -65,7 +65,7 @@ ESP8266 based gateway between MQTT and IR. Use with PlatformIO. Works with ESP-0
 * D1,D2 - 1N4148
 * Q1 - NPN transistor
 * IR1 - IR receiver
-* IR LED1, IR LED2 - Infrared LED_PIN
+* IR LED1, IR LED2 - Infrared LED
 * R1 - 3.3kΩ
 * R2 - 2.5Ω
 
@@ -78,6 +78,8 @@ ESP8266 based gateway between MQTT and IR. Use with PlatformIO. Works with ESP-0
 ``` bash
 git clone https://github.com/enc-X/mqtt-ir-transceiver
 ```
+
+or download  [repository](https://github.com/enc-X/mqtt-ir-transceiver/archive/master.zip)
 
 #### 2. Import project to PlatformIO
 
