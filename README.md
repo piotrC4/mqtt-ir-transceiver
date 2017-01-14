@@ -92,7 +92,7 @@ During first boot device will act as AP with SSID **IRTRANS-XXXXXX**. Connect to
 
 ### Resetting configuration
 
-If during boot device have button pressed, it will go to configuration mode.
+If during boot device have is pressed, device will go to configuration mode.
 
 ### Controller → Device communication
 <table>
