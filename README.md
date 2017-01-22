@@ -162,6 +162,12 @@ If during boot device have is pressed, device will go to configuration mode.
     <td>Send Global Cache code</td>
     <td>Topic: "_mqtt_prefix_/sender/sendGC" <br/> Message: "32000,43,54,65,32,...."</td>
   </tr>
+  <tr>  
+    <td>_mqtt_prefix_/sender/sendRAW</td>
+    <td>\d+(,\d+)</td>
+    <td>Send RAW code</td>
+    <td>Topic: "_mqtt_prefix_/sender/sendRAW" <br/> Message: "9000,4550,550,600,600,600,...."</td>
+  </tr>
 </table>
 
 

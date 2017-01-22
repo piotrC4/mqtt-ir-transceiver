@@ -68,11 +68,17 @@ int readDataFile(char * fName, unsigned int destinationArray[])
 {
   if (!SPIFFS.exists(fName))
   {
+    #ifdef DEBUG
+      Serial.printf("*IR: File not found: %s.\n",fName);
+    #endif
     return -1;
   }
   File IRconfigFile=SPIFFS.open(fName,"r");
   if (!IRconfigFile)
   {
+    #ifdef DEBUG
+      Serial.printf("*IR: Unable to read file: %s.\n",fName);
+    #endif
     return -2;
   }
 
@@ -80,10 +86,13 @@ int readDataFile(char * fName, unsigned int destinationArray[])
   #ifdef DEBUG
   if (size>2500)
   {
-    Serial.printf("*IR: Config file %d size (%d)is too large",fName,size);
+    Serial.printf("*IR: Config file %s size (%d) is too large.\n",fName,size);
   }
   #endif
   int i =0;
+  #ifdef DEBUG
+    Serial.printf("*IR: Start reading file: %s, size: %d\n",fName,size);
+  #endif
   while(IRconfigFile.available() )
   {
     String line = IRconfigFile.readStringUntil('\n');

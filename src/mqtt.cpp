@@ -282,7 +282,7 @@ void callback(char* topic, byte* payload, unsigned int length)
     sendToDebug(String("*IR: irBitrStr=")+ irBitsStr+"\n");
     sendToDebug(String("*IR: irPanasAddrStr=")+irPanasAddrStr+"\n");
 
-    if (irTypStr=="storeRaw" || irTypStr == "sendGC")
+    if (irTypStr=="storeRaw" || irTypStr == "sendGC" || irTypStr == "sendRAW")
     {
       unsigned int msgLen = msgString.length();
       String allowedChars = String("0123456789,");
@@ -346,6 +346,14 @@ void callback(char* topic, byte* payload, unsigned int length)
         sendToDebug("*IR: Send GC\n");
         sendToDebug(String("*IR: Elements to send: ")+elementIdx+"\n");
         irsend.sendGC(rawIrData,elementIdx);
+        sendToDebug("*IR: GC send done.\n");
+      }
+      else if (irTypStr == "sendRAW")
+      {
+        sendToDebug("*IR: Send RAW\n");
+        sendToDebug(String("*IR: Elements to send: ")+elementIdx+"\n");
+        irsend.sendRaw(rawIrData,elementIdx,38);
+        sendToDebug("*IR: RAW send done.\n");        
       }
     }
     else if (irTypStr=="NEC")
