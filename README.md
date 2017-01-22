@@ -192,6 +192,12 @@ If during boot device have is pressed, device will go to configuration mode.
     <td>Send to controller received IR code</td>
     <td>Topic: "_mqtt_prefix_/receiver/RC_5/12"<br/>Message: "3294"</td>
   </tr>
+  <tr>
+    <td>_mqtt_prefix_/receiver/raw</td>
+    <td>\d+(,\d+)*</td>
+    <td>Send to controller received RAW IR code (only when RAW mode is enabled)</td>
+    <td>Topic: "_mqtt_prefix_/receiver/raw"<br/>Message: "9000,4550,550,600,600,600,..."</td>
+  </tr>
 </table>
 
 ### Integration with OpenHab
