@@ -166,7 +166,7 @@ If during boot device have is pressed, device will go to configuration mode.
     <td>_mqtt_prefix_/sender/sendRAW</td>
     <td>\d+(,\d+)</td>
     <td>Send RAW code</td>
-    <td>Topic: "_mqtt_prefix_/sender/sendRAW" <br/> Message: "9000,4550,550,600,600,600,...."</td>
+    <td>Topic: "_mqtt_prefix_/sender/sendRAW" <br/> Message: "9000,4550,550,600,600,600,..."</td>
   </tr>
 </table>
 
