@@ -212,7 +212,7 @@ void loop(void)
     {
 
       sendToDebug("*IR: Not connected to MQTT....\n");
-      delay(5000);
+      delay(2000);
       connect_to_MQTT();
     }
     decode_results  results;        // Somewhere to store the results
@@ -254,6 +254,19 @@ void loop(void)
       irrecv.resume();              // Prepare for the next value
     }
   }
+  else if (millis() - lastTSMQTTReconect > 60000)
+  {
+    // Try to reconnect MQTT every 60 seconds if dev is in nonmqtt mode
+    client.loop();
+
+    if (! client.connected())
+    {
+      sendToDebug("*IR: Not connected to MQTT....\n");
+      delay(2000);
+      connect_to_MQTT();
+    }
+    lastTSMQTTReconect = millis();
+  }
 
   bool newButtonState = digitalRead(TRIGGER_PIN);
 
@@ -261,7 +274,7 @@ void loop(void)
   if (buttonState != newButtonState && newButtonState == BUTTON_ACTIVE_LEVEL)
   {
     // Button pressed - send 1st code
-    lastAutoStart=millis(); // delay auto transmission
+    lastTSAutoStart=millis(); // delay auto transmission
     #ifdef LED_PIN
     digitalWrite(LED_PIN, LOW);
     #endif
@@ -294,7 +307,7 @@ void loop(void)
   }
   buttonState = newButtonState;
 
-  if (autoStartSecond && (millis() - lastAutoStart > 3000))
+  if (autoStartSecond && (millis() - lastTSAutoStart > 3000))
   {
     if (rawIR2size>0)
     {
@@ -307,7 +320,7 @@ void loop(void)
     #endif
     autoStartSecond = false;
   }
-  if (millis() - lastAutoStart > autoStartFreq)
+  if (millis() - lastTSAutoStart > autoStartFreq)
   {
     // Autostart
     #ifdef LED_PIN
@@ -320,6 +333,6 @@ void loop(void)
       irsend.sendRaw(rawIR1, rawIR1size, freq);
     }
     autoStartSecond = true;
-    lastAutoStart=millis();
+    lastTSAutoStart=millis();
   }
 }

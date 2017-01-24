@@ -18,7 +18,8 @@ bool shouldSaveConfig = false; //flag for saving data
 String clientName; // MQTT client name
 bool rawMode = false; // Raw mode receiver status
 
-unsigned long lastAutoStart;
+unsigned long lastTSAutoStart;
+unsigned long lastTSMQTTReconect;
 unsigned long autoStartFreq = 300000; // Frequency of autostart
 bool autoStartSecond = false;
 

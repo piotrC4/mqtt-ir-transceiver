@@ -67,7 +67,8 @@ extern bool MQTTMode;
 extern bool shouldSaveConfig ; //flag for saving data
 extern String clientName; // MQTT client name
 extern bool rawMode; // Raw mode receiver status
-extern unsigned long lastAutoStart;
+extern unsigned long lastTSAutoStart; // Last timestamp of auto sender
+extern unsigned long lastTSMQTTReconect; // Last timestamp of MQTT reconnect
 extern unsigned long autoStartFreq; // Frequency of autostart
 extern bool autoStartSecond;
 extern const bool useDebug;

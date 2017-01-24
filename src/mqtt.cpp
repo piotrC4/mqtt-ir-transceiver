@@ -333,6 +333,7 @@ void callback(char* topic, byte* payload, unsigned int length)
         sendToDebug(String("*IR: Write to file: ")+fName+"\n");
         sendToDebug(String("*IR: Elements to write: ")+elementIdx+"\n");
         writeDataFile(fName, rawIrData, elementIdx);
+        sendToDebug("*IR: File written\n");
 
         if (irBitsInt == 1 or irBitsInt ==2)
         {
@@ -353,7 +354,7 @@ void callback(char* topic, byte* payload, unsigned int length)
         sendToDebug("*IR: Send RAW\n");
         sendToDebug(String("*IR: Elements to send: ")+elementIdx+"\n");
         irsend.sendRaw(rawIrData,elementIdx,38);
-        sendToDebug("*IR: RAW send done.\n");        
+        sendToDebug("*IR: RAW send done.\n");
       }
     }
     else if (irTypStr=="NEC")
@@ -451,5 +452,8 @@ void connect_to_MQTT()
   {
     MQTTMode=false;
     sendToDebug("*IR: Entering non MQTT mode\n");
+  } else {
+    MQTTMode=true;
+    sendToDebug("*IR: Entering MQTT mode\n");
   }
 }
