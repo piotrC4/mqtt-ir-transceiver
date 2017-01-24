@@ -421,6 +421,8 @@ void connect_to_MQTT()
       client.publish((char*)myTopic, (char*) myIpString);
       sprintf(myTopic, "%s/info/type", mqtt_prefix);
       client.publish((char*)myTopic,"IR server");
+      sprintf(myTopic, "%s/info/version", mqtt_prefix);
+      client.publish((char*)myTopic,VERSION);
       String topicSubscribe = String (mqtt_prefix)+ SUFFIX_SUBSCRIBE;
       sendToDebug(String("*IR: Topic is: ") + topicSubscribe.c_str()+"\n");
       if (client.subscribe(topicSubscribe.c_str()))

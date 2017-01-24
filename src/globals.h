@@ -11,6 +11,8 @@
 #define SEQ_SIZE 10     // Raw sequnece size
 #define DEBUG X
 
+#define VERSION "0.01"
+
 #ifdef DEBUG
  // dev device (wemos)
 #define RECV_PIN 13    // D7 - GPIO13
