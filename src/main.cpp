@@ -50,6 +50,17 @@ void setup(void)
   Serial.begin(115200);
   //  Serial.begin(115200,SERIAL_8N1,SERIAL_TX_ONLY);
   #endif
+
+  // Init EEPROM
+  EEPROM.begin(sizeof(EEpromData));
+  EEPROM.get(0,EEpromData);
+  if (EEpromData.autoSendMode!=true && EEpromData.autoSendMode!=false)
+  {
+    EEpromData.autoSendMode=false;
+    EEPROM.put(0, EEpromData);
+    EEPROM.commit();
+  }
+
   pinMode(TRIGGER_PIN, INPUT);
 
   #ifdef LED_PIN
@@ -305,32 +316,35 @@ void loop(void)
   }
   buttonState = newButtonState;
 
-  if (autoStartSecond && (millis() - lastTSAutoStart > 3000))
+  if (EEpromData.autoSendMode)
   {
-    if (rawIR2size>0)
+    if (autoStartSecond && (millis() - lastTSAutoStart > 3000))
     {
-      sendToDebug("*IR: Auto sender - transmitting 2\n");
-      unsigned int freq=38;
-      irsend.sendRaw(rawIR2, rawIR2size, freq);
+      if (rawIR2size>0)
+      {
+        sendToDebug("*IR: Auto sender - transmitting 2\n");
+        unsigned int freq=38;
+        irsend.sendRaw(rawIR2, rawIR2size, freq);
+      }
+      #ifdef LED_PIN
+      digitalWrite(LED_PIN, HIGH);
+      #endif
+      autoStartSecond = false;
     }
-    #ifdef LED_PIN
-    digitalWrite(LED_PIN, HIGH);
-    #endif
-    autoStartSecond = false;
-  }
-  if (millis() - lastTSAutoStart > autoStartFreq)
-  {
-    // Autostart
-    #ifdef LED_PIN
-    digitalWrite(LED_PIN, LOW);
-    #endif
-    if (rawIR1size>0)
+    if (millis() - lastTSAutoStart > autoStartFreq)
     {
-      sendToDebug("*IR: Auto sender - transmitting 1\n");
-      unsigned int freq=38;
-      irsend.sendRaw(rawIR1, rawIR1size, freq);
+      // Autostart
+      #ifdef LED_PIN
+      digitalWrite(LED_PIN, LOW);
+      #endif
+      if (rawIR1size>0)
+      {
+        sendToDebug("*IR: Auto sender - transmitting 1\n");
+        unsigned int freq=38;
+        irsend.sendRaw(rawIR1, rawIR1size, freq);
+      }
+      autoStartSecond = true;
+      lastTSAutoStart=millis();
     }
-    autoStartSecond = true;
-    lastTSAutoStart=millis();
   }
 }

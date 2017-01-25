@@ -29,16 +29,18 @@
 #define BUTTON_ACTIVE_LEVEL LOW
 #endif
 
-#define       SUFFIX_SUBSCRIBE "/sender/#"
-#define            SUFFIX_WILL "/status"
-#define            SUFFIX_WIPE "/sender/wipe"
-#define          SUFFIX_REBOOT "/sender/reboot"
-#define             SUFFIX_CMD "/sender/cmd"
-#define      SUFFIX_CMD_RESULT "/sender/cmd/result"
-#define         SUFFIX_RAWMODE "/sender/rawMode"
-#define     SUFFIX_RAWMODE_VAL "/sender/rawMode/val"
-#define   SUFFIX_SENDSTOREDRAW "/sender/sendStoredRaw"
-#define SUFFIX_SENDSTORERAWSEQ "/sender/sendStoredRawSequence"
+#define        SUFFIX_SUBSCRIBE "/sender/#"
+#define             SUFFIX_WILL "/status"
+#define             SUFFIX_WIPE "/sender/wipe"
+#define           SUFFIX_REBOOT "/sender/reboot"
+#define              SUFFIX_CMD "/sender/cmd"
+#define       SUFFIX_CMD_RESULT "/sender/cmd/result"
+#define          SUFFIX_RAWMODE "/sender/rawMode"
+#define      SUFFIX_RAWMODE_VAL "/sender/rawMode/val"
+#define     SUFFIX_AUTOSENDMODE "/sender/autoSendMode"
+#define SUFFIX_AUTOSENDMODE_VAL "/sender/autoSendMode/val"
+#define    SUFFIX_SENDSTOREDRAW "/sender/sendStoredRaw"
+#define  SUFFIX_SENDSTORERAWSEQ "/sender/sendStoredRawSequence"
 
 // ----------------------------------------------------------------
 // Global includes
@@ -51,6 +53,7 @@
 #include <ESP8266WebServer.h>     // Local WebServer used to serve the configuration portal
 #include <WiFiManager.h>          // https://github.com/tzapu/WiFiManager WiFi Configuration Magic (id: 567)
 #include <ArduinoJson.h>          // https://github.com/bblanchon/ArduinoJson (id: 64)
+#include <EEprom.h>
 
 // Global variables
 extern unsigned int rawIrData[SLOT_SIZE+1]; // RAW data storage
@@ -63,6 +66,7 @@ extern char mqtt_user[32];
 extern char mqtt_pass[32];
 extern char mqtt_prefix[80];
 extern bool buttonState; // State of control button
+extern bool autoSendMode;
 extern bool MQTTMode;
 extern bool shouldSaveConfig ; //flag for saving data
 extern String clientName; // MQTT client name
@@ -74,13 +78,18 @@ extern bool autoStartSecond;
 extern const bool useDebug;
 
 // ------------------------------------------------
+// STRUCTURES
+struct EEpromDataStruct {
+  bool autoSendMode;
+};
+// ------------------------------------------------
 // Global objects
 
  extern IRrecv irrecv;
  extern IRsend irsend;
  extern WiFiClient wifiClient;
  extern PubSubClient client;
-
+ extern EEpromDataStruct EEpromData;
 // ------------------------------------------------
 // Functions declaration
 unsigned long StrToUL(String inputString);

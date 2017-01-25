@@ -121,6 +121,22 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
     }
 
   }
+  else if (topicSuffix==SUFFIX_AUTOSENDMODE)
+  {
+    String topicAutoSendModeVal=String(mqtt_prefix)+SUFFIX_AUTOSENDMODE_VAL;
+    if (msgString=="1" || msgString=="ON" || msgString=="true")
+    {
+      sendToDebug("*IR: AutoSend enabled");
+      client.publish(topicAutoSendModeVal.c_str(),"true");
+      EEpromData.autoSendMode = true;
+    } else {
+      sendToDebug("*IR: AutoSend disabled");
+      client.publish(topicAutoSendModeVal.c_str(),"true");
+      EEpromData.autoSendMode = false;
+    }
+    EEPROM.put(0, EEpromData);
+    EEPROM.commit();
+  }
   else if (topicSuffix==SUFFIX_SENDSTOREDRAW)
   {
     sendToDebug(String("*IR: raw send request from slot:")+msgString+"\n");
