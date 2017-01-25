@@ -11,7 +11,7 @@
 #define SEQ_SIZE 10     // Raw sequnece size
 #define DEBUG X
 
-#define VERSION "0.03"
+#define VERSION "0.04"
 
 #ifdef DEBUG
  // dev device (wemos)
@@ -53,7 +53,7 @@
 #include <ESP8266WebServer.h>     // Local WebServer used to serve the configuration portal
 #include <WiFiManager.h>          // https://github.com/tzapu/WiFiManager WiFi Configuration Magic (id: 567)
 #include <ArduinoJson.h>          // https://github.com/bblanchon/ArduinoJson (id: 64)
-#include <EEprom.h>
+#include <EEPROM.h>
 
 // Global variables
 extern unsigned int rawIrData[SLOT_SIZE+1]; // RAW data storage
