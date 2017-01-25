@@ -3,7 +3,7 @@
 /* **************************************************************
  * Processing MQTT message
  */
-void callback(char* topic, byte* payload, unsigned int length)
+void MQTTcallback(char* topic, byte* payload, unsigned int length)
 {
   int i = 0;
 
@@ -33,35 +33,12 @@ void callback(char* topic, byte* payload, unsigned int length)
   sendToDebug(String("*IR: Prefix: ")+mqtt_prefix+"\n");
   sendToDebug(String("*IR: Extracted suffix:\"") + topicSuffix + "\"\n");
 
-  unsigned int  rawData_s1[35] = {250,950, 200,2000, 200,1200, 200,2850, 200,1350, 200,1350, 200,1050, 200,2150, 200,12950, 200,950, 200,1200, 200,800, 200,1200, 200,1600, 200,1200, 200,800, 200,800, 200};  // UNKNOWN C0092718
-  unsigned int  rawData_s2[37] = {100,5850, 200,950, 200,2000, 200,1200, 200,2850, 200,1350, 200,1350, 200,1050, 200,2150, 200,12950, 200,950, 200,2300, 200,1900, 200,1200, 200,1650, 200,1200, 200,800, 200,800, 200};  // UNKNOWN 4AE2F613
-  unsigned int  rawData_11[35] = {250,950, 200,2000, 200,1250, 200,2850, 200,1350, 200,1350, 200,1050, 200,2150, 200,12950, 200,950, 200,800, 200,800, 200,1200, 200,800, 200,2450, 200,800, 200,800, 200};  // UNKNOWN 290BC97A
-  unsigned int  rawData_12[35] = {250,950, 200,2000, 200,1200, 200,2850, 200,1350, 200,1350, 200,1050, 200,2150, 200,12950, 200,950, 200,1900, 200,1900, 200,1200, 200,800, 200,2450, 200,800, 200,800, 200};  // UNKNOWN 8FEB0411
-  unsigned int  rawData_91[35] = {250,950, 200,2000, 200,1200, 200,2850, 200,1350, 200,1350, 200,1100, 200,2150, 200,12950, 200,950, 200,1750, 200,800, 200,1200, 200,1200, 200,1100, 200,800, 200,800, 200};  // UNKNOWN 19B50A9
-  unsigned int  rawData_92[35] = {250,950, 200,2000, 200,1250, 200,2850, 200,1350, 200,1350, 200,1100, 200,2150, 200,12950, 200,950, 200,2850, 200,1900, 200,1200, 200,1200, 200,1100, 200,800, 200,800, 200};  // UNKNOWN 442CD28F
-
   sendToDebug(String("*IR: Payload String: \"") + msgString + "\"\n");
   if (topicSuffix==SUFFIX_RAWMODE_VAL || topicSuffix==SUFFIX_CMD_RESULT)
   {
     sendToDebug("*IR: Ignore own response\n");
     // Ignore own responses
     return;
-  }
-  else if (topicSuffix==SUFFIX_NC_HDMI)
-  { // *9
-    irsend.sendRaw(rawData_s1, 35, freq);
-    irsend.sendRaw(rawData_s2, 37, freq);
-    irsend.sendRaw(rawData_91, 35, freq);
-    irsend.sendRaw(rawData_92, 35, freq);
-    sendToDebug("*IR: Send NC+ HDMI: *9\n");
-  }
-  else if (topicSuffix==SUFFIX_NC_EURO)
-  { // *1
-    irsend.sendRaw(rawData_s1, 35, freq);
-    irsend.sendRaw(rawData_s2, 37, freq);
-    irsend.sendRaw(rawData_11, 35, freq);
-    irsend.sendRaw(rawData_12, 35, freq);
-    sendToDebug("*IR: Send NC+ EURO: *1\n");
   }
   else if (topicSuffix==SUFFIX_REBOOT)
   {
@@ -337,7 +314,7 @@ void callback(char* topic, byte* payload, unsigned int length)
 
         if (irBitsInt == 1 or irBitsInt ==2)
         {
-          Serial.println("*IR: read files for default player");
+          sendToDebug("*IR: read files for default player");
           loadDefaultIR();
         }
       }
@@ -401,7 +378,7 @@ void connect_to_MQTT()
   char myTopic[100];
 
   client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  client.setCallback(MQTTcallback);
   int conn_counter = 2;
   while (conn_counter > 0)
   {

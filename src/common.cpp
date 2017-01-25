@@ -68,31 +68,24 @@ int readDataFile(char * fName, unsigned int destinationArray[])
 {
   if (!SPIFFS.exists(fName))
   {
-    #ifdef DEBUG
-      Serial.printf("*IR: File not found: %s.\n",fName);
-    #endif
+    sendToDebug(String("*IR: File not found: ")+fName+"\n");
+
     return -1;
   }
   File IRconfigFile=SPIFFS.open(fName,"r");
   if (!IRconfigFile)
   {
-    #ifdef DEBUG
-      Serial.printf("*IR: Unable to read file: %s.\n",fName);
-    #endif
+    sendToDebug(String("*IR: Unable to read file: ")+fName+"\n");
     return -2;
   }
 
   size_t size = IRconfigFile.size();
-  #ifdef DEBUG
   if (size>2500)
   {
-    Serial.printf("*IR: Config file %s size (%d) is too large.\n",fName,size);
+    sendToDebug(String("*IR: Config file ")+fName+" size ("+size+") is too large.\n");
   }
-  #endif
   int i =0;
-  #ifdef DEBUG
-    Serial.printf("*IR: Start reading file: %s, size: %d\n",fName,size);
-  #endif
+  sendToDebug(String("*IR: Start reading file: ")+fName+" size: "+size+"\n");
   while(IRconfigFile.available() )
   {
     String line = IRconfigFile.readStringUntil('\n');
@@ -144,7 +137,7 @@ void loadDefaultIR()
 /***************************************************************
  *  Interpreter of IR encoding ID
  */
-void  encoding (decode_results *results, char * result_encoding)
+void  getIrEncoding (decode_results *results, char * result_encoding)
 {
   switch (results->decode_type)
   {

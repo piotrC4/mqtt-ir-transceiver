@@ -11,7 +11,7 @@
 #define SEQ_SIZE 10     // Raw sequnece size
 #define DEBUG X
 
-#define VERSION "0.01"
+#define VERSION "0.02"
 
 #ifdef DEBUG
  // dev device (wemos)
@@ -33,8 +33,6 @@
 #define            SUFFIX_WILL "/status"
 #define            SUFFIX_WIPE "/sender/wipe"
 #define          SUFFIX_REBOOT "/sender/reboot"
-#define         SUFFIX_NC_HDMI "/sender/NC/HDMI"
-#define         SUFFIX_NC_EURO "/sender/NC/EURO"
 #define             SUFFIX_CMD "/sender/cmd"
 #define      SUFFIX_CMD_RESULT "/sender/cmd/result"
 #define         SUFFIX_RAWMODE "/sender/rawMode"
@@ -92,9 +90,9 @@ String macToStr(const uint8_t* mac);
 void saveConfigCallback ();
 void loadDefaultIR();
 void connect_to_MQTT();
-void  encoding (decode_results *results, char * result_encoding);
+void  getIrEncoding (decode_results *results, char * result_encoding);
 
-void callback(char* topic, byte* payload, unsigned int length);
+void MQTTcallback(char* topic, byte* payload, unsigned int length);
 void connect_to_MQTT();
 void loadDefaultIR();
 void sendToDebug(String message);

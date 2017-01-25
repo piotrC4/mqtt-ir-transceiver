@@ -73,10 +73,9 @@ void setup(void)
         configFile.readBytes(buf.get(), size);
         DynamicJsonBuffer jsonBuffer;
         JsonObject& json = jsonBuffer.parseObject(buf.get());
-        #ifdef DEBUG
-        json.printTo(Serial);
-        Serial.println(" ");
-        #endif
+        char tmpBuff[400];
+        json.printTo(tmpBuff, sizeof(tmpBuff));
+        sendToDebug(String("*IR: config: "+String(tmpBuff) + "\n"));
         if (json.success())
         {
           sendToDebug("*IR: parsed json\n");
@@ -98,7 +97,6 @@ void setup(void)
   }
   else
   {
-
     sendToDebug("*IR: failed to mount FS\n");
   }
   sendToDebug("*IR: Start setup\n");
@@ -168,10 +166,10 @@ void setup(void)
     File configFile = SPIFFS.open("/config.json", "w");
     if (configFile)
     {
-      #ifdef DEBUG
-      Serial.print("*IR: ");
-      json.printTo(Serial);
-      #endif
+      char tmpBuff[400];
+      json.printTo(tmpBuff, sizeof(tmpBuff));
+      sendToDebug(String("*IR: writing config: "+String(tmpBuff) + "\n"));
+
       json.printTo(configFile);
       configFile.close();
     }
@@ -221,7 +219,7 @@ void loop(void)
       char myTopic[100];
       char myTmp[50];
       char myValue[500];
-      encoding (&results, myTmp);
+      getIrEncoding (&results, myTmp);
       if (results.decode_type == PANASONIC)
       { //Panasonic has address
         // structure "prefix/typ/bits[/panasonic_address]"
@@ -280,7 +278,7 @@ void loop(void)
     #endif
     if (rawIR1size>0)
     {
-      Serial.println("*IR: Button pressed - transmitting 1");
+      sendToDebug("*IR: Button pressed - transmitting 1\n");
       unsigned int freq=38;
       irsend.sendRaw(rawIR1, rawIR1size, freq);
     }
@@ -297,7 +295,7 @@ void loop(void)
     #endif
     if (rawIR2size>0)
     {
-      Serial.println("*IR: Button released - transmitting 2");
+      sendToDebug("*IR: Button released - transmitting 2\n");
       unsigned int freq=38;
       irsend.sendRaw(rawIR2, rawIR2size, freq);
     }
