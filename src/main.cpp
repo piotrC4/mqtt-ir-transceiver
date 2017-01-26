@@ -296,8 +296,7 @@ void loop(void)
     if (rawIR1size>0)
     {
       sendToDebug("*IR: Button pressed - transmitting 1\n");
-      unsigned int freq=38;
-      irsend.sendRaw(rawIR1, rawIR1size, freq);
+      irsend.sendRaw(rawIR1, rawIR1size, TRANSMITTER_FREQ);
     }
     #ifdef LED_PIN
     digitalWrite(LED_PIN, HIGH);
@@ -313,8 +312,7 @@ void loop(void)
     if (rawIR2size>0)
     {
       sendToDebug("*IR: Button released - transmitting 2\n");
-      unsigned int freq=38;
-      irsend.sendRaw(rawIR2, rawIR2size, freq);
+      irsend.sendRaw(rawIR2, rawIR2size, TRANSMITTER_FREQ);
     }
     #ifdef LED_PIN
     digitalWrite(LED_PIN, HIGH);
@@ -329,8 +327,7 @@ void loop(void)
       if (rawIR2size>0)
       {
         sendToDebug("*IR: Auto sender - transmitting 2\n");
-        unsigned int freq=38;
-        irsend.sendRaw(rawIR2, rawIR2size, freq);
+        irsend.sendRaw(rawIR2, rawIR2size, TRANSMITTER_FREQ);
       }
       #ifdef LED_PIN
       digitalWrite(LED_PIN, HIGH);
@@ -346,8 +343,7 @@ void loop(void)
       if (rawIR1size>0)
       {
         sendToDebug("*IR: Auto sender - transmitting 1\n");
-        unsigned int freq=38;
-        irsend.sendRaw(rawIR1, rawIR1size, freq);
+        irsend.sendRaw(rawIR1, rawIR1size, TRANSMITTER_FREQ);
       }
       autoStartSecond = true;
       lastTSAutoStart=millis();

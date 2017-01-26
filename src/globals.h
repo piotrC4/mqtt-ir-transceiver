@@ -11,7 +11,7 @@
 #define SEQ_SIZE 10     // Raw sequnece size
 #define DEBUG X
 
-#define VERSION "0.06"
+#define VERSION "0.07"
 
 #ifdef DEBUG
  // dev device (wemos)
@@ -28,6 +28,8 @@
 //#define LED_PIN 1      // D4 - GPIO2
 #define BUTTON_ACTIVE_LEVEL LOW
 #endif
+
+#define   TRANSMITTER_FREQ 38
 
 #define        SUFFIX_SUBSCRIBE "/sender/#"
 #define             SUFFIX_WILL "/status"

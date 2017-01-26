@@ -19,7 +19,6 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
       strcat(messageBuf, tempString);
   }
 
-  unsigned int freq=38;
   String msgString = String(messageBuf);
   String topicString = String(topic);
 
@@ -149,8 +148,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
       if (size>0)
       {
         sendToDebug("*IR: transmitting raw data from slot\n");
-        unsigned int freq=38;
-        irsend.sendRaw(rawIrData, size, freq);
+        irsend.sendRaw(rawIrData, size, TRANSMITTER_FREQ);
       }
     }
     else
@@ -227,8 +225,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
             sendToDebug(String(rawIrData[j]));
           }
           sendToDebug("\n*IR: Transmitting raw data sequence\n");
-          unsigned int freq=38;
-          irsend.sendRaw(rawIrData, size, freq);
+          irsend.sendRaw(rawIrData, size, TRANSMITTER_FREQ);
         }
       }
     }
