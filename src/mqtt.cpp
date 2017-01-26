@@ -126,12 +126,12 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
     String topicAutoSendModeVal=String(mqtt_prefix)+SUFFIX_AUTOSENDMODE_VAL;
     if (msgString=="1" || msgString=="ON" || msgString=="true")
     {
-      sendToDebug("*IR: AutoSend enabled");
+      sendToDebug("*IR: AutoSend enabled\n");
       client.publish(topicAutoSendModeVal.c_str(),"true");
       EEpromData.autoSendMode = true;
     } else {
-      sendToDebug("*IR: AutoSend disabled");
-      client.publish(topicAutoSendModeVal.c_str(),"true");
+      sendToDebug("*IR: AutoSend disabled\n");
+      client.publish(topicAutoSendModeVal.c_str(),"false");
       EEpromData.autoSendMode = false;
     }
     EEPROM.put(0, EEpromData);
@@ -148,7 +148,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
       int size = readDataFile(fName, rawIrData);
       if (size>0)
       {
-        sendToDebug("*IR: transmitting\n");
+        sendToDebug("*IR: transmitting raw data from slot\n");
         unsigned int freq=38;
         irsend.sendRaw(rawIrData, size, freq);
       }
@@ -226,7 +226,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
               sendToDebug(",");
             sendToDebug(String(rawIrData[j]));
           }
-          sendToDebug("\n*IR: Transmitting\n");
+          sendToDebug("\n*IR: Transmitting raw data sequence\n");
           unsigned int freq=38;
           irsend.sendRaw(rawIrData, size, freq);
         }
@@ -330,7 +330,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
 
         if (irBitsInt == 1 or irBitsInt ==2)
         {
-          sendToDebug("*IR: read files for default player");
+          sendToDebug("*IR: read files for default player\n");
           loadDefaultIR();
         }
       }
@@ -344,7 +344,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
       }
       else if (irTypStr == "sendRAW")
       {
-        sendToDebug("*IR: Send RAW\n");
+        sendToDebug("*IR: Send RAW from MQTT\n");
         sendToDebug(String("*IR: Elements to send: ")+elementIdx+"\n");
         irsend.sendRaw(rawIrData,elementIdx,38);
         sendToDebug("*IR: RAW send done.\n");

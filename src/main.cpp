@@ -133,7 +133,13 @@ void setup(void)
 
   if ( digitalRead(TRIGGER_PIN) == BUTTON_ACTIVE_LEVEL || (!SPIFFS.exists("/config.json")) )
   {
+    // Force enter configuration
     wifiManager.resetSettings();
+
+    // Set EEprom defaults
+    EEpromData.autoSendMode=false;
+    EEPROM.put(0, EEpromData);
+    EEPROM.commit();
   }
   #ifndef DEBUG
     wifiManager.setDebugOutput(false);

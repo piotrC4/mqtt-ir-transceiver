@@ -11,7 +11,7 @@
 #define SEQ_SIZE 10     // Raw sequnece size
 #define DEBUG X
 
-#define VERSION "0.04"
+#define VERSION "0.06"
 
 #ifdef DEBUG
  // dev device (wemos)
