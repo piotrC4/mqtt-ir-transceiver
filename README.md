@@ -101,7 +101,7 @@ Connect ESP to PC via serial adapter. In **PlatformIO** menu choose option **Upl
 
 ### Configuration
 
-During first boot device will act as AP with SSID **IRTRANS-XXXXXX**. Connect to this AP and go to http://192.168.4.1. Configure WIFI and MQTT paramters.
+During first boot device will act as AP with SSID **IRTRANS-XXXXXXXX** (password is XXXXXXXX). Connect to this AP and go to http://192.168.4.1. Configure WIFI and MQTT paramters.
 
 ### Resetting configuration
 
