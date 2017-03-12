@@ -188,7 +188,7 @@ void setup(void)
   } else {
     mqtt_port_i = DEFAULT_MQTT_PORT;
   }
-  if (mqtt_secure=="1")
+  if (mqtt_secure[0]=='1')
   {
     mqtt_secure_b = true;
   } else {

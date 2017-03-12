@@ -387,14 +387,17 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
  */
 void connect_to_MQTT()
 {
-  sendToDebug(String("*IR: Connecting to: ")+ mqtt_server+ ":"+ mqtt_port_i +" as " + clientName +"\n");
+
   char myTopic[100];
-
   if (mqtt_secure_b)
+  {
+    sendToDebug("*IR: connecting to TLS server:");
     mqttClient.setClient(wifiClientSecure);
-  else
+  } else {
+    sendToDebug("*IR: connecting to nonTLS server:");
     mqttClient.setClient(wifiClient);
-
+  }
+  sendToDebug(String(" ")+ mqtt_server+ ":"+ mqtt_port_i +" as " + clientName +"\n");
   mqttClient.setServer(mqtt_server, mqtt_port_i);
   mqttClient.setCallback(MQTTcallback);
   int conn_counter = 2;
