@@ -101,7 +101,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
       replay = "command unknown";
     }
     String topicCmdResult=String(mqtt_prefix)+ SUFFIX_CMD_RESULT;
-    client.publish((char *)topicCmdResult.c_str(), (char *)replay.c_str());
+    mqttClient.publish((char *)topicCmdResult.c_str(), (char *)replay.c_str());
     sendToDebug(String("*IR: Publish on: \"")+ topicCmdResult +"\":"+ replay+"\n");
   }
   else if (topicSuffix==SUFFIX_RAWMODE)
@@ -110,12 +110,12 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
       sendToDebug(String("*IR: Publish rawmode status on: \"")+topicRawModeVal+"\"\n" );
     if (msgString=="1" || msgString=="ON" || msgString=="true")
     {
-      client.publish(topicRawModeVal.c_str(),"true");
+      mqttClient.publish(topicRawModeVal.c_str(),"true");
       rawMode=true;
     }
     else
     {
-      client.publish(topicRawModeVal.c_str(),"false");
+      mqttClient.publish(topicRawModeVal.c_str(),"false");
       rawMode=false;
     }
 
@@ -126,11 +126,11 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
     if (msgString=="1" || msgString=="ON" || msgString=="true")
     {
       sendToDebug("*IR: AutoSend enabled\n");
-      client.publish(topicAutoSendModeVal.c_str(),"true");
+      mqttClient.publish(topicAutoSendModeVal.c_str(),"true");
       EEpromData.autoSendMode = true;
     } else {
       sendToDebug("*IR: AutoSend disabled\n");
-      client.publish(topicAutoSendModeVal.c_str(),"false");
+      mqttClient.publish(topicAutoSendModeVal.c_str(),"false");
       EEpromData.autoSendMode = false;
     }
     EEPROM.put(0, EEpromData);
@@ -148,7 +148,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
       if (size>0)
       {
         sendToDebug("*IR: transmitting raw data from slot\n");
-        irsend.sendRaw(rawIrData, size, TRANSMITTER_FREQ);
+        irsend.sendRaw(rawIrData, size-1, rawIrData[size-1]);
       }
     }
     else
@@ -225,7 +225,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
             sendToDebug(String(rawIrData[j]));
           }
           sendToDebug("\n*IR: Transmitting raw data sequence\n");
-          irsend.sendRaw(rawIrData, size, TRANSMITTER_FREQ);
+          irsend.sendRaw(rawIrData, size-1, rawIrData[size-1]);
         }
       }
     }
@@ -342,8 +342,8 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
       else if (irTypStr == "sendRAW")
       {
         sendToDebug("*IR: Send RAW from MQTT\n");
-        sendToDebug(String("*IR: Elements to send: ")+elementIdx+"\n");
-        irsend.sendRaw(rawIrData,elementIdx,38);
+        sendToDebug(String("*IR: No of elements to send: ")+(elementIdx-1)+", frequency="+rawIrData[elementIdx-1]+"kHz\n");
+        irsend.sendRaw(rawIrData,elementIdx-1,rawIrData[elementIdx-1]);
         sendToDebug("*IR: RAW send done.\n");
       }
     }
@@ -387,35 +387,41 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
  */
 void connect_to_MQTT()
 {
-  sendToDebug(String("*IR: Connecting to: ")+ mqtt_server+ " as " + clientName +"\n");
+  sendToDebug(String("*IR: Connecting to: ")+ mqtt_server+ ":"+ mqtt_port_i +" as " + clientName +"\n");
   char myTopic[100];
 
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(MQTTcallback);
+  if (mqtt_secure_b)
+    mqttClient.setClient(wifiClientSecure);
+  else
+    mqttClient.setClient(wifiClient);
+
+  mqttClient.setServer(mqtt_server, mqtt_port_i);
+  mqttClient.setCallback(MQTTcallback);
   int conn_counter = 2;
+
   while (conn_counter > 0)
   {
     sendToDebug(String("*IR: MQTT user:")+ mqtt_user + "\n");
     sendToDebug("*IR: MQTT pass: ********\n");
     String topicWill = String(mqtt_prefix)+ SUFFIX_WILL;
-    if (client.connect((char*) clientName.c_str(), (char*)mqtt_user, (char *)mqtt_pass, topicWill.c_str(), 2, true, "false"))
+    if (mqttClient.connect((char*) clientName.c_str(), (char*)mqtt_user, (char *)mqtt_pass, topicWill.c_str(), 2, true, "false"))
     {
-      client.publish(topicWill.c_str(), "true", true);
+      mqttClient.publish(topicWill.c_str(), "true", true);
       sendToDebug("*IR: Connected to MQTT broker\n");
       sprintf(myTopic, "%s/info/client", mqtt_prefix);
-      client.publish((char*)myTopic, (char*) clientName.c_str());
+      mqttClient.publish((char*)myTopic, (char*) clientName.c_str());
       IPAddress myIp = WiFi.localIP();
       char myIpString[24];
       sprintf(myIpString, "%d.%d.%d.%d", myIp[0], myIp[1], myIp[2], myIp[3]);
       sprintf(myTopic, "%s/info/ip", mqtt_prefix);
-      client.publish((char*)myTopic, (char*) myIpString);
+      mqttClient.publish((char*)myTopic, (char*) myIpString);
       sprintf(myTopic, "%s/info/type", mqtt_prefix);
-      client.publish((char*)myTopic,"IR server");
+      mqttClient.publish((char*)myTopic,"IR server");
       sprintf(myTopic, "%s/info/version", mqtt_prefix);
-      client.publish((char*)myTopic,VERSION);
+      mqttClient.publish((char*)myTopic,VERSION);
       String topicSubscribe = String (mqtt_prefix)+ SUFFIX_SUBSCRIBE;
       sendToDebug(String("*IR: Topic is: ") + topicSubscribe.c_str()+"\n");
-      if (client.subscribe(topicSubscribe.c_str()))
+      if (mqttClient.subscribe(topicSubscribe.c_str()))
       {
         sendToDebug("*IR: Successfully subscribed\n");
         delay(1);
@@ -425,7 +431,7 @@ void connect_to_MQTT()
     }
     else
     {
-      sendToDebug(String("*IR: MQTT connect failed, rc=") + client.state() + " try again in 5 seconds\n");
+      sendToDebug(String("*IR: MQTT connect failed, rc=") + mqttClient.state() + " try again in 5 seconds\n");
       // Wait 5 seconds before retrying
       for (int i = 0; i<10; i++)
       {

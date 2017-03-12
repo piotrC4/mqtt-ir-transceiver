@@ -8,6 +8,7 @@ ESP8266 based gateway between MQTT and IR. Code compatible with [PlatformIO](htt
 * Receive MQTT messages and send IR signal (multiple formats supported - NEC, RC5, LG, SONY, [Global Cache](https://irdb.globalcache.com/Home/Database) )
 * Storing raw IR messages on flash and transmitting via IR  
 * Constant current IR LED emitter circuit (based on [Analysir schematic](https://www.analysir.com/blog/2013/11/22/constant-current-infrared-led-circuit/) )
+* MQTT over SSL support (not tested)
 
 ##Working modes
 
@@ -117,8 +118,8 @@ If during boot device have is pressed, device will go to configuration mode.
   <tr>
     <td>_mqtt_prefix_/sender/storeRaw/_store_id_</td>
     <td>\d+(,\d+)</td>
-    <td>store raw codes sequence in slot no. _store_id_</td>
-    <td>Topic: "_mqtt_prefix_/sender/storeRaw/10" <br/> Message: "32,43,54,65,32"</td>
+    <td>store raw codes sequence in slot no. _store_id_, last number is frequency in kHz</td>
+    <td>Topic: "_mqtt_prefix_/sender/storeRaw/10" <br/> Message: "11,43,54,65,32" <br/> 32 - is frequency in kHz</td>
   </tr>
   <tr>
     <td>_mqtt_prefix_/sender/sendStoredRaw</td>
@@ -165,8 +166,8 @@ If during boot device have is pressed, device will go to configuration mode.
   <tr>  
     <td>_mqtt_prefix_/sender/sendRAW</td>
     <td>\d+(,\d+)</td>
-    <td>Send RAW code</td>
-    <td>Topic: "_mqtt_prefix_/sender/sendRAW" <br/> Message: "9000,4550,550,600,600,600,..."</td>
+    <td>Send RAW code with given frequency</td>
+    <td>Topic: "_mqtt_prefix_/sender/sendRAW" <br/> Message: "9000,4550,550,600,600,600,...,32" <br/>32 is frequency in kHz</td>
   </tr>
 </table>
 
@@ -217,6 +218,9 @@ Switch   ir_philips_volp
 Number ir_in_lg
         "LG IR command [%d]"    <own_ir> (gIR)
         {mqtt="<[mosquitto:esp8266/02/receiver/NEC/32:state:default]"}
+Switch ir_adb_star
+        "ADB 0" <own_ir) (gIR)
+        {mqtt=">[mosquitto:esp8266/02/sender/sendGC:command:ON:38000,1,37,8,34,8,75,8,44,8,106,8,50,8,50,8,39,8,81,8,525,8,34,8,60,8,29,8,44,8,44,8,44,8,29,8,29,8,3058,8,34,8,75,8,44,8,106,8,50,8,50,8,39,8,81,8,525,8,34,8,101,8,70,8,44,8,44,8,44,8,29,8,29,8,3058]", autoupdate="false"}
 ```
 * Using in rules:
 ```java

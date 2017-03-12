@@ -44,12 +44,16 @@
  */
 void setup(void)
 {
+
+  #ifdef DEBUG
+    Serial.begin(115200);
+  #else
+    Serial.begin(115200,SERIAL_8N1,SERIAL_TX_ONLY);
+    sendToDebug("*IR: non debug init\n");
+  #endif
+
   // delay for reset button
   delay(5000);
-  #ifdef DEBUG
-  Serial.begin(115200);
-  //  Serial.begin(115200,SERIAL_8N1,SERIAL_TX_ONLY);
-  #endif
 
   // Init EEPROM
   EEPROM.begin(sizeof(EEpromData));
@@ -92,6 +96,10 @@ void setup(void)
           sendToDebug("*IR: parsed json\n");
           if (json.containsKey("mqtt_server"))
             strcpy(mqtt_server, json["mqtt_server"]);
+          if (json.containsKey("mqtt_port"))
+            strcpy(mqtt_port, json["mqtt_port"]);
+          if (json.containsKey("mqtt_secure"))
+            strcpy(mqtt_secure, json["mqtt_secure"]);
           if (json.containsKey("mqtt_user"))
             strcpy(mqtt_user, json["mqtt_user"]);
           if (json.containsKey("mqtt_pass"))
@@ -111,10 +119,13 @@ void setup(void)
     sendToDebug("*IR: failed to mount FS\n");
   }
   sendToDebug("*IR: Start setup\n");
-  WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
-  WiFiManagerParameter custom_mqtt_user("user", "mqtt user", mqtt_user, 32);
-  WiFiManagerParameter custom_mqtt_pass("pass", "mqtt password", mqtt_pass, 32);
-  WiFiManagerParameter custom_mqtt_prefix("prefix", "mqtt prefix", mqtt_prefix, 80);
+
+  WiFiManagerParameter custom_mqtt_secure("secure", "is secure server 0-no / 1-yes", mqtt_secure, 2);
+  WiFiManagerParameter custom_mqtt_server("server", "MQTT server address", mqtt_server, 40);
+  WiFiManagerParameter custom_mqtt_port("port", "MQTT server port", mqtt_port, 5);
+  WiFiManagerParameter custom_mqtt_user("user", "MQTT user", mqtt_user, 32);
+  WiFiManagerParameter custom_mqtt_pass("pass", "MQTT password", mqtt_pass, 32);
+  WiFiManagerParameter custom_mqtt_prefix("prefix", "MQTT prefix", mqtt_prefix, 80);
   //WiFiManager
   //Local intialization. Once its business is done, there is no need to keep it around
   #ifdef LED_PIN
@@ -126,7 +137,9 @@ void setup(void)
   //set config save notify callback
   wifiManager.setSaveConfigCallback(saveConfigCallback);
 
+  wifiManager.addParameter(&custom_mqtt_secure);
   wifiManager.addParameter(&custom_mqtt_server);
+  wifiManager.addParameter(&custom_mqtt_port);
   wifiManager.addParameter(&custom_mqtt_user);
   wifiManager.addParameter(&custom_mqtt_pass);
   wifiManager.addParameter(&custom_mqtt_prefix);
@@ -146,8 +159,8 @@ void setup(void)
   #endif
   char mySSID[17];
   char myPASS[7];
-  sprintf(mySSID,"IRTRANS-%06X", ESP.getChipId());
-  sprintf(myPASS,"%06X", ESP.getChipId());
+  sprintf(mySSID,"IRTRANS-00%06X", ESP.getChipId());
+  sprintf(myPASS,"00%06X", ESP.getChipId());
   if (!wifiManager.autoConnect(mySSID, myPASS) )
   {
     sendToDebug("*IR: failed to connect and hit timeout\n");
@@ -161,10 +174,26 @@ void setup(void)
   #endif
 
   //read updated parameters
+  strcpy(mqtt_secure, custom_mqtt_secure.getValue());
   strcpy(mqtt_server, custom_mqtt_server.getValue());
+  strcpy(mqtt_port, custom_mqtt_port.getValue());
   strcpy(mqtt_user, custom_mqtt_user.getValue());
   strcpy(mqtt_pass, custom_mqtt_pass.getValue());
   strcpy(mqtt_prefix, custom_mqtt_prefix.getValue());
+
+  String tmp = mqtt_port;
+  if (tmp.toInt())
+  {
+    mqtt_port_i = tmp.toInt();
+  } else {
+    mqtt_port_i = DEFAULT_MQTT_PORT;
+  }
+  if (mqtt_secure=="1")
+  {
+    mqtt_secure_b = true;
+  } else {
+    mqtt_secure_b = false;
+  }
 
   irsend.begin();
   irrecv.enableIRIn();  // Start the receiver
@@ -179,6 +208,8 @@ void setup(void)
     json["mqtt_user"] = mqtt_user;
     json["mqtt_pass"] = mqtt_pass;
     json["mqtt_prefix"] = mqtt_prefix;
+    json["mqtt_port"] = mqtt_port;
+    json["mqtt_secure"] = mqtt_secure;
 
     File configFile = SPIFFS.open("/config.json", "w");
     if (configFile)
@@ -221,9 +252,9 @@ void loop(void)
 
   if (MQTTMode)
   {
-    client.loop();
+    mqttClient.loop();
 
-    if (! client.connected())
+    if (! mqttClient.connected())
     {
 
       sendToDebug("*IR: Not connected to MQTT....\n");
@@ -250,7 +281,7 @@ void loop(void)
       {
         // any other has code and bits
         sprintf(myValue, "%d", results.value);
-        client.publish((char*) myTopic, (char*) myValue );
+        mqttClient.publish((char*) myTopic, (char*) myValue );
       }
       else if (rawMode==true)
       {
@@ -264,7 +295,7 @@ void loop(void)
         }
         myString.toCharArray(myValue,500);
         sprintf(myTopic, "%s/receiver/raw", mqtt_prefix );
-        client.publish( (char*) myTopic, (char*) myValue );
+        mqttClient.publish( (char*) myTopic, (char*) myValue );
       }
       irrecv.resume();              // Prepare for the next value
     }
@@ -272,9 +303,9 @@ void loop(void)
   else if (millis() - lastTSMQTTReconect > 60000)
   {
     // Try to reconnect MQTT every 60 seconds if dev is in nonmqtt mode
-    client.loop();
+    mqttClient.loop();
 
-    if (! client.connected())
+    if (! mqttClient.connected())
     {
       sendToDebug("*IR: Not connected to MQTT....\n");
       delay(2000);

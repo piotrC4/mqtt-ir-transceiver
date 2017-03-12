@@ -9,6 +9,7 @@
 #define SLOTS_NUMBER 20 // Number of slots
 #define SLOT_SIZE 300   // Size of single slot
 #define SEQ_SIZE 10     // Raw sequnece size
+
 #define DEBUG X
 
 #define VERSION "0.07"
@@ -20,6 +21,7 @@
 #define TRIGGER_PIN 15 // D8 - GPIO15
 #define LED_PIN 2      // D4 - GPIO2
 #define BUTTON_ACTIVE_LEVEL HIGH
+
 #else
  // production device - ESP01
 #define RECV_PIN 0    // D3 - GPIO0 - IR detector/demodulator
@@ -44,6 +46,7 @@
 #define    SUFFIX_SENDSTOREDRAW "/sender/sendStoredRaw"
 #define  SUFFIX_SENDSTORERAWSEQ "/sender/sendStoredRawSequence"
 
+#define DEFAULT_MQTT_PORT 1883
 // ----------------------------------------------------------------
 // Global includes
 #include <ESP8266WiFi.h>
@@ -64,9 +67,13 @@ extern unsigned int rawIR1[SLOT_SIZE+1];
 extern unsigned int rawIR2[SLOT_SIZE+1];
 extern int rawIR1size, rawIR2size;
 extern char mqtt_server[40];
+extern char mqtt_port[5];
 extern char mqtt_user[32];
 extern char mqtt_pass[32];
 extern char mqtt_prefix[80];
+extern char mqtt_secure[1];
+extern bool mqtt_secure_b;
+extern int mqtt_port_i;
 extern bool buttonState; // State of control button
 extern bool autoSendMode;
 extern bool MQTTMode;
@@ -90,7 +97,8 @@ struct EEpromDataStruct {
  extern IRrecv irrecv;
  extern IRsend irsend;
  extern WiFiClient wifiClient;
- extern PubSubClient client;
+ extern WiFiClientSecure wifiClientSecure;
+ extern PubSubClient mqttClient;
  extern EEpromDataStruct EEpromData;
 // ------------------------------------------------
 // Functions declaration
