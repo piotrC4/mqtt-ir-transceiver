@@ -58,6 +58,10 @@ ESP8266 based gateway between MQTT and IR. Code compatible with [PlatformIO](htt
   </tr>
 </table>
 
+For ESP01 following changes have to take place:
+* in platformio.ini change board from d1_mini to esp01_1m
+* in globals.h comment out line "#define DEBUG X" 
+
 ###Schematic
 ![alt text](docs/ir-transceiver_schematic.png "Basic schematic")
 
