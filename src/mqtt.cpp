@@ -104,6 +104,26 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
     mqttClient.publish((char *)topicCmdResult.c_str(), (char *)replay.c_str());
     sendToDebug(String("*IR: Publish on: \"")+ topicCmdResult +"\":"+ replay+"\n");
   }
+  else if (topicSuffix==SUFFIX_OTA)
+  {
+    t_httpUpdate_return ret = ESPhttpUpdate.update(msgString);
+    delay(500);
+
+    switch(ret) {
+        case HTTP_UPDATE_FAILED:
+            sendToDebug(String("*IR: HTTP_UPDATE_FAILD Error (")
+              + ESPhttpUpdate.getLastError() + "): "+ ESPhttpUpdate.getLastErrorString().c_str()+"\n");
+            break;
+        case HTTP_UPDATE_NO_UPDATES:
+            sendToDebug("*IR: HTTP_UPDATE_NO_UPDATES\n");
+            break;
+        case HTTP_UPDATE_OK:
+            sendToDebug("*IR: HTTP_UPDATE_OK\n");
+            break;
+    }
+    delay(500);
+
+  }
   else if (topicSuffix==SUFFIX_RAWMODE)
   {
       String topicRawModeVal=String(mqtt_prefix)+ SUFFIX_RAWMODE_VAL;

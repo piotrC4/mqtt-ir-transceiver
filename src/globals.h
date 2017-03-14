@@ -12,7 +12,7 @@
 
 #define DEBUG X
 
-#define VERSION "0.07"
+#define VERSION "0.09"
 
 #ifdef DEBUG
  // dev device (wemos)
@@ -45,6 +45,7 @@
 #define SUFFIX_AUTOSENDMODE_VAL "/sender/autoSendMode/val"
 #define    SUFFIX_SENDSTOREDRAW "/sender/sendStoredRaw"
 #define  SUFFIX_SENDSTORERAWSEQ "/sender/sendStoredRawSequence"
+#define              SUFFIX_OTA "/sender/otaURL"
 
 #define DEFAULT_MQTT_PORT 1883
 // ----------------------------------------------------------------
@@ -59,6 +60,7 @@
 #include <WiFiManager.h>          // https://github.com/tzapu/WiFiManager WiFi Configuration Magic (id: 567)
 #include <ArduinoJson.h>          // https://github.com/bblanchon/ArduinoJson (id: 64)
 #include <EEPROM.h>
+#include <ESP8266httpUpdate.h>
 
 // Global variables
 extern unsigned int rawIrData[SLOT_SIZE+1]; // RAW data storage

@@ -8,7 +8,8 @@ ESP8266 based gateway between MQTT and IR. Code compatible with [PlatformIO](htt
 * Receive MQTT messages and send IR signal (multiple formats supported - NEC, RC5, LG, SONY, [Global Cache](https://irdb.globalcache.com/Home/Database) )
 * Storing raw IR messages on flash and transmitting via IR  
 * Constant current IR LED emitter circuit (based on [Analysir schematic](https://www.analysir.com/blog/2013/11/22/constant-current-infrared-led-circuit/) )
-* MQTT over SSL support (not tested)
+* MQTT over SSL support
+* OTA updates
 
 ##Working modes
 
@@ -60,7 +61,7 @@ ESP8266 based gateway between MQTT and IR. Code compatible with [PlatformIO](htt
 
 For ESP01 following changes have to take place:
 * in platformio.ini change board from d1_mini to esp01_1m
-* in globals.h comment out line "#define DEBUG X" 
+* in globals.h comment out line "#define DEBUG X"
 
 ###Schematic
 ![alt text](docs/ir-transceiver_schematic.png "Basic schematic")
@@ -172,6 +173,12 @@ If during boot device have is pressed, device will go to configuration mode.
     <td>\d+(,\d+)</td>
     <td>Send RAW code with given frequency</td>
     <td>Topic: "_mqtt_prefix_/sender/sendRAW" <br/> Message: "9000,4550,550,600,600,600,...,32" <br/>32 is frequency in kHz</td>
+  </tr>
+  <tr>
+    <td>_mqtt_prefix_/sender/otaURL</td>
+    <td>.*</td>
+    <td>Update via HTTP from URL</td>
+    <td>Topic: "_mqtt_prefix_/sender/otaURL"<br/>Message: "http://ota.server/firmware.bin"</td>
   </tr>
 </table>
 
