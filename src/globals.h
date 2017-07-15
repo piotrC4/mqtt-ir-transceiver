@@ -12,7 +12,7 @@
 
 #define DEBUG X
 
-#define VERSION "0.09"
+#define VERSION "0.10"
 
 #ifdef DEBUG
  // dev device (wemos)

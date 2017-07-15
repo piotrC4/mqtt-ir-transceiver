@@ -23,7 +23,7 @@ ESP8266 based gateway between MQTT and IR. Code compatible with [PlatformIO](htt
 
 ##Used librariers
 
-* IRremoteESP8266 - https://github.com/markszabo/IRremoteESP8266/
+* IRremoteESP8266 v1.2.0 - https://github.com/markszabo/IRremoteESP8266/
 * ArduinoJson - https://github.com/bblanchon/ArduinoJson
 * PubSubClient - https://github.com/knolleary/pubsubclient
 * WiFiManager - https://github.com/tzapu/WiFiManager
