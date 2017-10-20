@@ -10,7 +10,7 @@
 #define SLOT_SIZE 300   // Size of single slot
 #define SEQ_SIZE 10     // Raw sequnece size
 
-#define DEBUG X
+//#define DEBUG X
 
 #define VERSION "0.10"
 
@@ -54,6 +54,9 @@
 #include <WiFiClient.h>
 #include "FS.h"
 #include <IRremoteESP8266.h>      // https://github.com/markszabo/IRremoteESP8266 (use local copy)
+#include <IRrecv.h>
+#include <IRsend.h>
+#include <IRutils.h>
 #include <PubSubClient.h>         // https://github.com/knolleary/pubsubclient (id: 89)
 #include <DNSServer.h>            // Local DNS Server used for redirecting all requests to the configuration portal
 #include <ESP8266WebServer.h>     // Local WebServer used to serve the configuration portal
@@ -63,11 +66,11 @@
 #include <ESP8266httpUpdate.h>
 
 // Global variables
-extern unsigned int rawIrData[SLOT_SIZE+1]; // RAW data storage
-extern unsigned int rawSequence[SEQ_SIZE];
-extern unsigned int rawIR1[SLOT_SIZE+1];
-extern unsigned int rawIR2[SLOT_SIZE+1];
-extern int rawIR1size, rawIR2size;
+extern uint16_t rawIrData[SLOT_SIZE+1]; // RAW data storage
+extern uint16_t rawSequence[SEQ_SIZE];
+extern uint16_t rawIR1[SLOT_SIZE+1];
+extern uint16_t rawIR2[SLOT_SIZE+1];
+extern uint16_t rawIR1size, rawIR2size;
 extern char mqtt_server[40];
 extern char mqtt_port[5];
 extern char mqtt_user[32];
@@ -105,8 +108,8 @@ struct EEpromDataStruct {
 // ------------------------------------------------
 // Functions declaration
 unsigned long StrToUL(String inputString);
-bool writeDataFile(const char* fName, unsigned int sourceArray[], int sourceSize);
-int readDataFile(char * fName, unsigned int destinationArray[]);
+bool writeDataFile(const char* fName, uint16_t sourceArray[], int sourceSize);
+uint16_t readDataFile(char * fName, uint16_t destinationArray[]);
 String macToStr(const uint8_t* mac);
 void saveConfigCallback ();
 void loadDefaultIR();

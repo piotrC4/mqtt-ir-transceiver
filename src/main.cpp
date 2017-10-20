@@ -271,7 +271,7 @@ void loop(void)
       if (results.decode_type == PANASONIC)
       { //Panasonic has address
         // structure "prefix/typ/bits[/panasonic_address]"
-        sprintf(myTopic, "%s/receiver/%s/%d/%d", mqtt_prefix, myTmp, results.bits, results.panasonicAddress );
+        sprintf(myTopic, "%s/receiver/%s/%d/%d", mqtt_prefix, myTmp, results.bits, results.address );
       }
       else
       {
@@ -289,7 +289,7 @@ void loop(void)
         String myString;
         for (int i = 1;  i < results.rawlen;  i++)
         {
-          myString+= (results.rawbuf[i] * USECPERTICK);
+          myString+= (results.rawbuf[i] * RAWTICK);
           if ( i < results.rawlen-1 )
             myString+=","; // ',' not needed on last one
         }

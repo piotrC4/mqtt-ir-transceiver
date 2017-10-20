@@ -1,12 +1,12 @@
 #include "globals.h"
 
-unsigned int rawIrData[SLOT_SIZE+1];
-unsigned int rawSequence[SEQ_SIZE];
+uint16_t rawIrData[SLOT_SIZE+1];
+uint16_t rawSequence[SEQ_SIZE];
 
-unsigned int rawIR1[SLOT_SIZE+1];
-unsigned int rawIR2[SLOT_SIZE+1];
+uint16_t rawIR1[SLOT_SIZE+1];
+uint16_t rawIR2[SLOT_SIZE+1];
 
-int rawIR1size, rawIR2size;
+uint16_t rawIR1size, rawIR2size;
 
 char mqtt_server[40];
 char mqtt_port[5];

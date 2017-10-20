@@ -22,7 +22,7 @@ unsigned long StrToUL(String inputString)
  * - sourceArray[] - source for data into slot
  * - sourceSize - number of elements in array
  */
-bool writeDataFile(const char* fName, unsigned int sourceArray[], int sourceSize)
+bool writeDataFile(const char* fName, uint16_t sourceArray[], int sourceSize)
 {
   if (SPIFFS.exists(fName))
   {
@@ -63,7 +63,7 @@ bool writeDataFile(const char* fName, unsigned int sourceArray[], int sourceSize
  * - -2 - problem with file opening
  * -  n - number of elements in store
  */
-int readDataFile(char * fName, unsigned int destinationArray[])
+uint16_t readDataFile(char * fName, uint16_t destinationArray[])
 {
   if (!SPIFFS.exists(fName))
   {

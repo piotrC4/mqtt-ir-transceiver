@@ -164,11 +164,11 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
     {
       char fName[20];
       sprintf(fName,"/ir/%d.dat",slotNo);
-      int size = readDataFile(fName, rawIrData);
+      uint16_t size = readDataFile(fName, rawIrData);
       if (size>0)
       {
         sendToDebug("*IR: transmitting raw data from slot\n");
-        irsend.sendRaw(rawIrData, size-1, rawIrData[size-1]);
+        irsend.sendRaw(rawIrData, size-1, (uint16_t)rawIrData[size-1]);
       }
     }
     else
@@ -234,7 +234,7 @@ void MQTTcallback(char* topic, byte* payload, unsigned int length)
         char fName[20];
         sprintf(fName,"/ir/%d.dat",slotNo);
         sendToDebug(String("*IR: Read file %s\n")+fName);
-        int size = readDataFile(fName, rawIrData);
+        uint16_t size = readDataFile(fName, rawIrData);
         if (size>0)
         {
           sendToDebug("*IR: File content:");
