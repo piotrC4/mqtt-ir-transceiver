@@ -11,26 +11,26 @@ ESP8266 based gateway between MQTT and IR. Code compatible with [PlatformIO](htt
 * MQTT over SSL support
 * OTA updates
 
-##Working modes
+## Working modes
 
-###IR transmitting
+### IR transmitting
 
 ![alt text](docs/ir-mode-sender.png "IR transmitting mode")
 
-###IR receiving
+### IR receiving
 
 ![alt text](docs/ir-mode-receiver.png "IR receiving mode")
 
-##Used librariers
+## Used librariers
 
 * IRremoteESP8266 - https://github.com/markszabo/IRremoteESP8266/
 * ArduinoJson - https://github.com/bblanchon/ArduinoJson
 * PubSubClient - https://github.com/knolleary/pubsubclient
 * WiFiManager - https://github.com/tzapu/WiFiManager
 
-##Installation
+## Installation
 
-###GPIO connections:
+### GPIO connections:
 <table>
   <tr>
   <th>GPIO WEMOS</th>
@@ -63,10 +63,10 @@ For ESP01 following changes have to take place:
 * in platformio.ini change board from d1_mini to esp01_1m
 * in globals.h comment out line "#define DEBUG X"
 
-###Schematic
+### Schematic
 ![alt text](docs/ir-transceiver_schematic.png "Basic schematic")
 
-###BOM
+### BOM
 
 * D1,D2 - 1N4148
 * Q1 - NPN transistor
@@ -75,7 +75,7 @@ For ESP01 following changes have to take place:
 * R1 - 3.3kΩ
 * R2 - 2.5Ω
 
-###Compilation and firmware uploading
+### Compilation and firmware uploading
 
 [PlatformIO](http://platformio.org/) and [Atom editor](https://atom.io/) with PlatformIO IDE package are required. See [installation procedure](http://docs.platformio.org/en/stable/ide/atom.html#installation)
 
@@ -102,7 +102,7 @@ In **PlatformIO** menu choose option **Build**
 
 Connect ESP to PC via serial adapter. In **PlatformIO** menu choose option **Upload**.
 
-##Usage
+## Usage
 
 ### Configuration
 
