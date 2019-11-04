@@ -46,9 +46,9 @@ void setup(void)
 {
 
   #ifdef DEBUG
-    Serial.begin(115200);
+    Serial.begin(CUST_SERIAL_SPEED);
   #else
-    Serial.begin(115200,SERIAL_8N1,SERIAL_TX_ONLY);
+    Serial.begin(CUST_SERIAL_SPEED,SERIAL_8N1,SERIAL_TX_ONLY);
     sendToDebug("*IR: non debug init\n");
   #endif
 

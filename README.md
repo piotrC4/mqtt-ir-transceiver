@@ -85,9 +85,9 @@ For ESP01 following changes have to take place:
 
 In VS Code press F1 enter ''git: clone'' + Enter and insert link to my repository (https://github.com/enc-X/mqtt-ir-transceiver)
 
-### 2. Modify platformio.ini
+### 2. Modify platformio.ini (optional)
 
-Edit platformio.ini and setup upload_port variable acording to system settings
+Edit platformio.ini and setup upload_port variable acording to system settings if PlatofmIO can'd identify proper COM port
 
 ### 3. Build binary file
 
