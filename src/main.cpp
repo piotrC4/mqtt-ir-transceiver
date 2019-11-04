@@ -226,9 +226,10 @@ void setup(void)
       sendToDebug("*IR: failed to open config file for writing\n");
     }
   }
-
-  sendToDebug(String("*IR: Connected to ")+String (WiFi.SSID())+"\n");
-  sendToDebug(String("*IR: IP address: ")+String(WiFi.localIP())+"\n");
+  tmp = String("*IR: Connected to "+String(WiFi.SSID())+"\n");
+  sendToDebug(tmp);
+  //tmp = String("*IR: IP address: "+String(WiFi.localIP())+"\n");
+  //sendToDebug(tmp);
 
   clientName += "IRGW-";
   uint8_t mac[6];
@@ -280,7 +281,7 @@ void loop(void)
       if (results.decode_type != UNKNOWN)
       {
         // any other has code and bits
-        sprintf(myValue, "%d", results.value);
+        sprintf(myValue, "%l", results.value);
         mqttClient.publish((char*) myTopic, (char*) myValue );
       }
       else if (rawMode==true)

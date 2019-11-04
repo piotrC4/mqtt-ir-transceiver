@@ -75,32 +75,27 @@ For ESP01 following changes have to take place:
 * R1 - 3.3kΩ
 * R2 - 2.5Ω
 
-### Compilation and firmware uploading
+### Requirements:
 
-[PlatformIO](http://platformio.org/) and [Atom editor](https://atom.io/) with PlatformIO IDE package are required. See [installation procedure](http://docs.platformio.org/en/stable/ide/atom.html#installation)
+* [Visual Studio Code](https://code.visualstudio.com/)
+* [PlatformIO IDE extenstion](https://docs.platformio.org/en/latest/ide/vscode.html)
+* [GIT](https://git-scm.com/downloads)
 
-#### 1. Clone the Repository
+### 1. Clone the Repository into VS Code
 
-``` bash
-git clone https://github.com/enc-X/mqtt-ir-transceiver
-```
+In VS Code press F1 enter ''git: clone'' + Enter and insert link to my repository (https://github.com/enc-X/mqtt-ir-transceiver)
 
-or download  [repository](https://github.com/enc-X/mqtt-ir-transceiver/archive/master.zip)
+### 2. Modify platformio.ini
 
-#### 2. Import project to PlatformIO
+Edit platformio.ini and setup upload_port variable acording to system settings
 
-Run Atom editor and in **PlatformIO** menu choose option **Open Project folder...**. Select folder with imported project.
+### 3. Build binary file
 
-#### 3. Setup serial Port
-From the list with files in the left tab open the platformio.ini and change the **upload_port = com12** to the correct port with your ESP8266.
+In **PlatformIO** menu choose **PROJECT TASKS -> Build**
 
-#### 4. Build binary file
+### 4. Upload firmware to ESP8266
 
-In **PlatformIO** menu choose option **Build**
-
-#### 5. Upload to ESP8266
-
-Connect ESP to PC via serial adapter. In **PlatformIO** menu choose option **Upload**.
+Connect ESP to PC via serial adapter. In **PlatformIO** menu choose option **PROJECT TASKS -> Upload**. 
 
 ## Usage
 
@@ -181,7 +176,6 @@ If during boot device have is pressed, device will go to configuration mode.
     <td>Topic: "_mqtt_prefix_/sender/otaURL"<br/>Message: "http://ota.server/firmware.bin"</td>
   </tr>
 </table>
-
 
 ### Device → Controller communication
 
