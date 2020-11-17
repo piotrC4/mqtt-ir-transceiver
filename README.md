@@ -83,7 +83,7 @@ For ESP01 following changes have to take place:
 
 ### 1. Clone the Repository into VS Code
 
-In VS Code press F1 enter ''git: clone'' + Enter and insert link to my repository (https://github.com/enc-X/mqtt-ir-transceiver)
+In VS Code press F1 enter ''git: clone'' + Enter and insert link to my repository (https://github.com/piotrC4/mqtt-ir-transceiver)
 
 ### 2. Modify platformio.ini (optional)
 
